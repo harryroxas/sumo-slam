@@ -327,6 +327,7 @@ com/google/protobuf/CodedInputStream$StreamDecoder$RefillCallback.class
 com/google/protobuf/RepeatedFieldBuilderV3$MessageExternalList.class
 com/google/protobuf/FloatArrayList.class
 com/google/protobuf/RopeByteString$Balancer.class
+com/main/app/Client$1.class
 com/google/protobuf/GeneratedMessageLite$ExtendableBuilder.class
 com/google/protobuf/UnknownFieldSet.class
 com/google/protobuf/DescriptorProtos$FieldOptions$1.class
@@ -363,6 +364,7 @@ com/google/protobuf/CodedOutputStream$UnsafeDirectNioEncoder.class
 com/google/protobuf/GeneratedMessageV3$FieldAccessorTable$SingularFieldAccessor.class
 com/google/protobuf/GeneratedMessageV3$FieldAccessorTable$SingularMessageFieldAccessor.class
 com/google/protobuf/DescriptorProtos$FileDescriptorProtoOrBuilder.class
+com/main/app/Client$2.class
 com/google/protobuf/DescriptorProtos$DescriptorProto$Builder.class
 com/main/app/TcpPacketProtos$TcpPacket$ErrPacket$1.class
 com/main/app/TcpPacketProtos$TcpPacket$ErrPacket.class
