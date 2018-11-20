@@ -1,5 +1,5 @@
 syntax = "proto2";
-
+package app;
 import "player.proto";
 option java_package = "com.main.app";
 option java_outer_classname = "TcpPacketProtos";
