@@ -1,7 +1,13 @@
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.Point2D;
+
 public class Player extends Sprite {
-    public static final int normalSpeed = 10;
+    public static final int NORMAL_SPEED = 10;
     public int xPosition;
     public int yPosition;
+    public float xCenter;
+    public float yCenter;
 	public int playerNo;
 	public int speed;
     public int noOfWins;
@@ -11,7 +17,7 @@ public class Player extends Sprite {
 	public Player(int playerNo, int x, int y) {
 		super(x, y);
         this.playerNo = playerNo;
-        this.speed = this.normalSpeed;
+        this.speed = NORMAL_SPEED;
         this.noOfWins = 0;
         this.isDead = false;
         this.imgPath = "sumoWrestler" + this.playerNo + ".png";
@@ -32,16 +38,28 @@ public class Player extends Sprite {
 	public void moveY(int yPosition){
 		this.yPosition = yPosition;
 	}
+
+	public void setCenter() {
+		this.xCenter = this.getX()+(this.width/2);
+		this.yCenter = this.getY()+(this.height-(this.height/3));
+	}
+	
+	public void checkIfDead() {
+		
+	}
 	
     public void move() {
         int newX = this.getX() + this.xPosition;
         int newY = this.getY() + this.yPosition;
         this.setX(newX);
         this.setY(newY);
+        this.setCenter();
         System.out.print(this.x);
-        System.out.println(this.xPosition);
+        System.out.print("-");
+        System.out.println(this.xCenter);        
         System.out.print(this.y);
-        System.out.println(this.yPosition);
+        System.out.print("-");
+        System.out.println(this.yCenter);
     }
 
     public void speedUp() {
@@ -55,7 +73,7 @@ public class Player extends Sprite {
 	}
 
     public void resetSpeed() {
-        this.speed = this.normalSpeed;
+        this.speed = NORMAL_SPEED;
     }
 
     public void resetPlayer() {
@@ -93,6 +111,14 @@ public class Player extends Sprite {
 	
 	public int getMoveY(){
 		return this.yPosition;
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+	}
+	
+	public Point2D getCenter() {
+		return new Point2D.Float(this.xCenter, this.yCenter);
 	}
 }
 

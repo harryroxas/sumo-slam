@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 
 public class GamePanel extends JPanel implements KeyListener{
     public static final int STAGE_WIDTH = 540;
@@ -10,7 +11,8 @@ public class GamePanel extends JPanel implements KeyListener{
 	public Player player;
 	public Player player2;
 	private boolean gameDone;
-
+	Ellipse2D stage;
+	
 	public GamePanel(){
 		this.setLayout();
 		this.addComponents();
@@ -24,6 +26,7 @@ public class GamePanel extends JPanel implements KeyListener{
 	}
 
 	public void addComponents(){
+		this.stage = new Ellipse2D.Float(10,210,STAGE_WIDTH, STAGE_HEIGHT);
 		this.player  = new Player(1, 300, 300);
 		this.player2 = new Player(2, 100, 100);
 	}
@@ -40,14 +43,24 @@ public class GamePanel extends JPanel implements KeyListener{
 	    //}
 	}
 	
+	public void checkIfDead() {
+	    Point2D active = this.player.getCenter();
+	    //for (Players player : players) {
+	        if (!stage.contains(active)) {
+	        	System.out.println("DIES");
+	        	this.player.playerDies();
+	        	this.repaint();
+	        }
+	    //}
+	}
+	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
+		g2.draw (this.stage);
 		g2.drawImage(this.player.getImg(),this.player.getX(),this.player.getY(),this);
 		g2.drawImage(this.player2.getImg(),this.player2.getX(),this.player2.getY(),this);
-		Ellipse2D stage = new Ellipse2D.Float(200,100,STAGE_WIDTH, STAGE_HEIGHT);
-		g2.draw (stage);
 	}
 
 	public void keyPressed(KeyEvent ke){
@@ -68,8 +81,8 @@ public class GamePanel extends JPanel implements KeyListener{
 			this.player.moveX(10);
 			System.out.println("RIGHT");
 		}
-
 		this.player.move();
+		this.checkIfDead();
 		this.checkCollisions();
 		this.repaint();
 	}
