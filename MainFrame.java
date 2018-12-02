@@ -16,10 +16,7 @@ public class MainFrame extends JFrame {
 	
 	public MainFrame(){
 		this.initLayout();
-		//this.setComponents();
-		this.game = new GamePanel();
-		this.setContentPane(game);
-		this.endLayout();	
+		this.setComponents();	
 	}
 
 	public void initLayout(){
@@ -67,6 +64,7 @@ public class MainFrame extends JFrame {
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					cardLayout.show(mainFrame, "game");
+					game.requestFocus();
 				}
 			}
 		);
