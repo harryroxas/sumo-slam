@@ -1,8 +1,10 @@
+package com.main.app;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
-public class Player extends Sprite {
+public class User extends Sprite {
     public static final int NORMAL_SPEED = 10;
     public int xPosition;
     public int yPosition;
@@ -14,13 +16,13 @@ public class Player extends Sprite {
     public boolean isDead;
     public String imgPath;
 
-	public Player(int playerNo, int x, int y) {
+	public User(int playerNo, int x, int y) {
 		super(x, y);
         this.playerNo = playerNo;
         this.speed = NORMAL_SPEED;
         this.noOfWins = 0;
         this.isDead = false;
-        this.imgPath = "sumoWrestler" + this.playerNo + ".png";
+        this.imgPath = "/assets/sumoWrestler" + this.playerNo + ".png";
         this.setImg(this.imgPath);
         this.width = 60;
         this.height = 60;
@@ -81,7 +83,7 @@ public class Player extends Sprite {
         this.isDead = false;
     }
 
-    public void collidesWith(Player others) {
+    public void collidesWith(User others) {
     	if(this.getMoveX() == 0) {
         	int minusY = others.getMoveY() + this.getMoveY();
             others.moveY(minusY);

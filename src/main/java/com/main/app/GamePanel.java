@@ -1,3 +1,5 @@
+package com.main.app;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -8,8 +10,8 @@ public class GamePanel extends JPanel implements KeyListener{
     public static final int STAGE_WIDTH = 540;
     public static final int STAGE_HEIGHT = 240;
 
-	public Player player;
-	public Player player2;
+	public User player;
+	public User player2;
 	private boolean gameDone;
 	Ellipse2D stage;
 	
@@ -27,8 +29,8 @@ public class GamePanel extends JPanel implements KeyListener{
 
 	public void addComponents(){
 		this.stage = new Ellipse2D.Float(10,210,STAGE_WIDTH, STAGE_HEIGHT);
-		this.player  = new Player(1, 300, 300);
-		this.player2 = new Player(2, 100, 100);
+		this.player  = new User(1, 300, 300);
+		this.player2 = new User(2, 100, 100);
 	}
 
 	public void checkCollisions() {

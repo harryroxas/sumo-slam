@@ -1,6 +1,8 @@
 /*
 MainFrame.java contains the JFrame component specification and Game panel thread instantiation
 */
+package com.main.app;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
