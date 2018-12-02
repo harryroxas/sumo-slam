@@ -3,6 +3,8 @@ package com.main.app;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class User extends Sprite {
     public static final int NORMAL_SPEED = 10;
@@ -14,7 +16,7 @@ public class User extends Sprite {
 	public int speed;
     public int noOfWins;
     public boolean isDead;
-    public String imgPath;
+    public BufferedImage img;
 
 	public User(int playerNo, int x, int y) {
 		super(x, y);
@@ -22,8 +24,10 @@ public class User extends Sprite {
         this.speed = NORMAL_SPEED;
         this.noOfWins = 0;
         this.isDead = false;
-        this.imgPath = "/assets/sumoWrestler" + this.playerNo + ".png";
-        this.setImg(this.imgPath);
+        try{
+            this.img = ImageIO.read(User.class.getResource("/sumoWrestler" + this.playerNo + ".png"));
+        }catch(Exception e){}
+        this.setImg(this.img);
         this.width = 60;
         this.height = 60;
     }

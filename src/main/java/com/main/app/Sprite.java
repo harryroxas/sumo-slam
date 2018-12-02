@@ -1,8 +1,6 @@
 package com.main.app;
 
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.File;
 
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -13,19 +11,14 @@ public class Sprite {
 	public int width;
 	public int height;
 	public BufferedImage img;
-	public String path;
 
 	public Sprite(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public void setImg(String path){
-		this.path = path;
-		try {
-			this.img = ImageIO.read(new File(this.path));
-			System.out.println(this.path);
-		} catch (Exception e) {}
+	public void setImg(BufferedImage img){
+		this.img = img;
 	}
 	
 	public void setImgSize(int width, int height) {
