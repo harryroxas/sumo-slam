@@ -19,6 +19,12 @@ public class GamePanel extends JPanel implements KeyListener{
 		this.setLayout();
 		this.addComponents();
 		this.addKeyListener(this);	
+		addMouseListener(new MouseAdapter(){
+			@Override
+			public void mousePressed(MouseEvent e){
+				requestFocus();
+			}
+		});
 	}
 		
 	public void setLayout(){
@@ -30,7 +36,7 @@ public class GamePanel extends JPanel implements KeyListener{
 	public void addComponents(){
 		this.stage = new Ellipse2D.Float(10,210,STAGE_WIDTH, STAGE_HEIGHT);
 		this.player  = new User(1, 300, 300);
-		this.player2 = new User(2, 100, 100);
+		this.player2 = new User(2, 200, 300);
 	}
 
 	public void checkCollisions() {

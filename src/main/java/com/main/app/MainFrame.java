@@ -277,6 +277,8 @@ public class MainFrame extends JFrame {
 		this.gamePanel.add(this.chatGUI);
 		this.gamePanel.add(this.game);
 		this.mainFrame.add(this.gamePanel, "game");
+
+		this.game.requestFocus();
 	}	
 	
 	public void endLayout(){
