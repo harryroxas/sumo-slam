@@ -8,13 +8,13 @@ import java.awt.geom.Point2D;
 
 public class GamePanel extends JPanel implements KeyListener{
     public static final int STAGE_WIDTH = 540;
-    public static final int STAGE_HEIGHT = 240;
+	public static final int STAGE_HEIGHT = 240;
 
 	public User player;
 	public User player2;
 	private boolean gameDone;
 	Ellipse2D stage;
-	
+
 	public GamePanel(){
 		this.setLayout();
 		this.addComponents();
