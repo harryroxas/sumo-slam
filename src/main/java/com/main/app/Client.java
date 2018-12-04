@@ -9,6 +9,7 @@ import com.main.app.PlayerProtos.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.JTextArea;
 
 public class Client {
     private static final String SERVER_IP = "202.92.144.45";
@@ -22,6 +23,29 @@ public class Client {
     private static Player player;
     private static Scanner scanner = new Scanner(System.in);
     private static boolean connected;
+    private static int maxPlayers;
+    private static String playerName;
+    private JTextArea textArea;
+
+    public Client(int choice, int maxPlayers, String playerName) throws IOException {
+        this.maxPlayers = maxPlayers;
+        this.playerName = playerName;
+        runClient(choice);
+    }
+
+    public Client(int choice, String lobbyId, String playerName) throws IOException {
+        this.lobbyId = lobbyId;
+        this.playerName = playerName;
+        runClient(choice);
+    }
+
+    public Client(int choice) throws IOException {
+        runClient(choice);
+    }
+
+    public void setTextArea(JTextArea textArea){
+        this.textArea = textArea;
+    }
 
     public static void updatePlayerList() throws IOException {
         TcpPacket.PlayerListPacket playersPacket = TcpPacket.PlayerListPacket.newBuilder()
@@ -45,7 +69,32 @@ public class Client {
             }
         }
     }
-    public static void main(String[] args) throws IOException {
+
+    public static void sendMessage(String message) throws IOException {
+
+        if(message.equals("exit")){
+            TcpPacket.DisconnectPacket disconnect = TcpPacket.DisconnectPacket.newBuilder()
+                    .setType(TcpPacket.PacketType.DISCONNECT)
+                    .build();
+            
+            outputStream.write(disconnect.toByteArray());
+            outputStream.flush();
+
+            System.out.println("You left the game.");
+            connected = false;
+            server.close();
+        }else{
+            TcpPacket.ChatPacket chatPacket = TcpPacket.ChatPacket.newBuilder()
+                    .setType(TcpPacket.PacketType.CHAT)
+                    .setMessage(message)
+                    .setPlayer(player)
+                    .build();         
+            outputStream.write(chatPacket.toByteArray());
+            outputStream.flush();
+        }
+    }
+    
+    public void runClient(int choice) throws IOException {
 
         server = new Socket(SERVER_IP, PORT);
         client_br = new BufferedReader(new InputStreamReader(System.in));
@@ -53,33 +102,13 @@ public class Client {
         inputStream = new DataInputStream(server.getInputStream());
 
         if(server != null && outputStream != null && inputStream != null){
-            boolean chooseAction = true;
-            int choice;
             
             while(true){
-                do{      
-                    System.out.println("[1] Create Lobby");
-                    System.out.println("[2] Connect to a Lobby");
-                    System.out.println("[3] Exit");
-                    System.out.print("Choice: ");
-                    choice = Integer.valueOf(client_br.readLine());
-                    
-                    if(choice > 0 && choice < 4) chooseAction = false;
-                
-                }while(chooseAction == true);
-
                 byte[] serverResponse;
                 TcpPacket receivedPacket;
                 switch(choice){
                     
                     case 1: //Create Lobby
-                        int maxPlayers = 0;
-
-                        while(maxPlayers < 4){
-                            System.out.print("Maximum players (at least 4) in the chat lobby: ");
-                            maxPlayers = Integer.parseInt(scanner.nextLine());
-                        }
-
                         TcpPacket.CreateLobbyPacket lobby = TcpPacket.CreateLobbyPacket.newBuilder()
                             .setType(TcpPacket.PacketType.CREATE_LOBBY)
                             .setMaxPlayers(maxPlayers)
@@ -104,16 +133,12 @@ public class Client {
                         }
                     
                     case 2: //Connect to a Lobby
-                        System.out.print("Enter lobby ID: ");
-                        String id = scanner.next();
-                        System.out.print("Enter player name: ");
-                        String name = scanner.next();
-                        player = Player.newBuilder().setName(name).build();
+                        player = Player.newBuilder().setName(playerName).build();
 
                         TcpPacket.ConnectPacket connectLobby = TcpPacket.ConnectPacket.newBuilder()
                             .setType(TcpPacket.PacketType.CONNECT)
                             .setPlayer(player)
-                            .setLobbyId(id)
+                            .setLobbyId(lobbyId)
                             .build();
 
                         outputStream.write(connectLobby.toByteArray());
@@ -171,15 +196,15 @@ public class Client {
                                 
                                 if(receivedPacket.getType() == TcpPacket.PacketType.CONNECT){
                                     TcpPacket.ConnectPacket connectPacket = TcpPacket.ConnectPacket.parseFrom(serverResponse);
-                                    System.out.println(connectPacket.getPlayer().getName() + " has entered the lobby.");
+                                    textArea.append(connectPacket.getPlayer().getName() + " has entered the game.\n");
                                     updatePlayerList();
                                 }else if(receivedPacket.getType() == TcpPacket.PacketType.DISCONNECT){
                                     TcpPacket.DisconnectPacket disconnectPacket = TcpPacket.DisconnectPacket.parseFrom(serverResponse);
-                                    System.out.println(disconnectPacket.getPlayer().getName() + " has left the lobby.");
+                                    textArea.append(disconnectPacket.getPlayer().getName() + " has left the game.\n");
                                     updatePlayerList();
                                 }else if(receivedPacket.getType() == TcpPacket.PacketType.CHAT){
                                     TcpPacket.ChatPacket chatPacket = TcpPacket.ChatPacket.parseFrom(serverResponse);
-                                    System.out.println(chatPacket.getPlayer().getName() + ": " + chatPacket.getMessage());
+                                    textArea.append(chatPacket.getPlayer().getName() + ": " + chatPacket.getMessage() + "\n");
                                 }
                             }
                         }catch(IOException e){
@@ -190,48 +215,8 @@ public class Client {
                     }
                 }
             );
-
-            Thread chatThread = new Thread(new Runnable(){
-            
-                @Override
-                public void run() {
-                    try{
-                        while(true){
-                            String message = scanner.nextLine();
-                            
-                            if(message.equals("exit")){
-                                TcpPacket.DisconnectPacket disconnect = TcpPacket.DisconnectPacket.newBuilder()
-                                        .setType(TcpPacket.PacketType.DISCONNECT)
-                                        .build();
-                                
-                                outputStream.write(disconnect.toByteArray());
-                                outputStream.flush();
-
-                                System.out.println("You left the chatroom.");
-                                connected = false;
-                                System.exit(0);
-                                break;
-                            }else{
-                                TcpPacket.ChatPacket chatPacket = TcpPacket.ChatPacket.newBuilder()
-                                        .setType(TcpPacket.PacketType.CHAT)
-                                        .setMessage(message)
-                                        .setPlayer(player)
-                                        .build();         
-                                outputStream.write(chatPacket.toByteArray());
-                                outputStream.flush();
-                            }
-                        }
-                    }catch(IOException e){
-                    System.err.println("Error: " + e.toString());
-                    
-                    }catch(Exception e){
-                    System.err.println("Error: " + e.toString());
-                    }
-                }
-            });
         
             statusThread.start();
-            chatThread.start();
         }
     }
 }
