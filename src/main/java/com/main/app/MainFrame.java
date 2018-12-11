@@ -21,9 +21,9 @@ public class MainFrame extends JFrame {
 	public JPanel gamePanel;
 	public GameServer gameServer;
 	public GamePanel game;
-	public JPanel mainMenu;
-	public JPanel options;
-	public JPanel instructions;
+	public Panel mainMenu;
+	public Panel options;
+	public Panel instructions;
 	public CardLayout cardLayout;
 	public JPanel chatGUI;
 	public JTextArea textArea;
@@ -66,37 +66,20 @@ public class MainFrame extends JFrame {
 	}
 
 	public void setMainMenu() {
-		this.mainMenu = new JPanel();
+		this.mainMenu = new Panel("mainMenu.png");
 		this.mainMenu.setLayout(new BoxLayout(mainMenu, BoxLayout.Y_AXIS));
-		this.mainMenu.setBackground(Color.BLUE);
-		
-		JLabel gameTitle = new JLabel("SUMO SLAM");
-		JButton playButton = new JButton("START");
-		JButton instructionsButton = new JButton("INSTRUCTIONS");
-		JButton exitButton = new JButton("EXIT");
+	
+		Button playButton = new Button("startButton.png");
+		Button instructionsButton = new Button("instructionsButton.png");
+		Button exitButton = new Button("exitButton.png");
 
-		gameTitle.setPreferredSize(new Dimension(200,200));
-		gameTitle.setFont(new Font("Serif", Font.PLAIN, 72));
-		playButton.setPreferredSize(new Dimension(100,100));
-		playButton.setBackground(Color.BLUE);
-		playButton.setFont(new Font("Serif", Font.PLAIN, 24));
-		playButton.setBorderPainted(false);
-		instructionsButton.setPreferredSize(new Dimension(100,100));
-		instructionsButton.setBackground(Color.BLUE);
-		instructionsButton.setFont(new Font("Serif", Font.PLAIN, 24));
-		instructionsButton.setBorderPainted(false);
-		exitButton.setPreferredSize(new Dimension(100,100));
-		exitButton.setBackground(Color.BLUE);
-		exitButton.setFont(new Font("Serif", Font.PLAIN, 24));
-		exitButton.setBorderPainted(false);
-
-		this.mainMenu.add(gameTitle);
+		this.mainMenu.add(Box.createVerticalStrut(200));
 		this.mainMenu.add(playButton);
 		this.mainMenu.add(Box.createVerticalStrut(25));
 		this.mainMenu.add(instructionsButton);
 		this.mainMenu.add(Box.createVerticalStrut(25));
 		this.mainMenu.add(exitButton);
-		gameTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+
 		playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		instructionsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -127,31 +110,14 @@ public class MainFrame extends JFrame {
 	}
 
 	public void setStartMenu(){
-		this.options = new JPanel();
+		this.options = new Panel("mainMenu.png");
 		this.options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
-		this.options.setBackground(Color.BLUE);
 
-		JButton createButton = new JButton("CREATE A LOBBY");
-		JButton connectButton = new JButton("CONNECT TO A LOBBY");
-		JButton backButton = new JButton("BACK");
+		Button createButton = new Button("createButton.png");
+		Button connectButton = new Button("connectButton.png");
+		Button backButton = new Button("backButton.png");
 
-		createButton.setPreferredSize(new Dimension(100,100));
-		createButton.setBackground(Color.BLUE);
-		createButton.setFont(new Font("Serif", Font.PLAIN, 24));
-		createButton.setBorderPainted(false);
-		createButton.setMargin(new Insets(0,0,0,0));
-		connectButton.setPreferredSize(new Dimension(100,100));
-		connectButton.setBackground(Color.BLUE);
-		connectButton.setFont(new Font("Serif", Font.PLAIN, 24));
-		connectButton.setBorderPainted(false);
-		connectButton.setMargin(new Insets(0,0,0,0));
-		backButton.setPreferredSize(new Dimension(100,100));
-		backButton.setBackground(Color.BLUE);
-		backButton.setFont(new Font("Serif", Font.PLAIN, 24));
-		backButton.setBorderPainted(false);
-		backButton.setMargin(new Insets(0,0,0,0));
-		
-		this.options.add(Box.createVerticalStrut(100));
+		this.options.add(Box.createVerticalStrut(200));
 		this.options.add(createButton);
 		this.options.add(Box.createVerticalStrut(50));
 		this.options.add(connectButton);
@@ -212,11 +178,14 @@ public class MainFrame extends JFrame {
 	}
 
 	public void setInstructions() {
-		this.instructions = new JPanel();
-		instructions.setBackground(Color.RED);
+		this.instructions = new Panel("instructions.png");
+		this.instructions.setLayout(new BoxLayout(instructions, BoxLayout.Y_AXIS));
 		
-		JButton backButton = new JButton("Go back");
+		Button backButton = new Button("goBackButton.png");
+
+		this.instructions.add(Box.createVerticalStrut(420));
 		this.instructions.add(backButton);
+		backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		backButton.addActionListener(
 			new ActionListener() {
@@ -271,7 +240,7 @@ public class MainFrame extends JFrame {
 
 		this.game = new GamePanel(ip, playerName);
 		this.game.setPreferredSize(new Dimension(600, 500));
-		JButton backButton = new JButton("EXIT GAME");
+		Button backButton = new Button("exitGame.png");
 		this.game.add(backButton);
 	
 		backButton.addActionListener(
