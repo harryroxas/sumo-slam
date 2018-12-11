@@ -121,18 +121,19 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	        Rectangle others = player.getBounds();
 	        if (active.intersects(others)) {
 	        	System.out.println("COLLIDES");
-	        	this.player.collidesWith(player);
+				this.player.collidesWith(player);
+				this.checkIfDead(player);
 	        	this.repaint();
 	        }
 	    }
 	}
 	
-	public void checkIfDead() {
-	    Point2D active = this.player.getCenter();
+	public void checkIfDead(User player) {
+	    Point2D active = player.getCenter();
 	    //for (Players player : players) {
 	        if (!stage.contains(active)) {
 	        	System.out.println("DIES");
-	        	this.player.playerDies();
+	        	player.playerDies();
 	        	this.repaint();
 	        }
 	    //}
@@ -165,7 +166,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				this.player.moveX(10);
 			}
 			this.player.move();
-			this.checkIfDead();
+			this.checkIfDead(this.player);
 			this.checkCollisions();
 			this.send("PLAYER "+name+" "+player.getX()+" "+player.getY());
 		}
