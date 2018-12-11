@@ -1,5 +1,14 @@
 # SUMO SLAM
 
+## Installing Protobuf 3.6.1
+```
+curl -OL https://github.com/google/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip
+unzip protoc-3.6.1-linux-x86_64.zip -d protoc3
+sudo mv protoc3/bin/* /usr/local/bin/
+sudo mv protoc3/include/* /usr/local/include/
+```
+
+
 ## Running the Program
 1. Install [protobuf 3.6.1](https://github.com/protocolbuffers/protobuf) and build with [maven](https://maven.apache.org/).
 2. Compile the program with `mvn package`.
