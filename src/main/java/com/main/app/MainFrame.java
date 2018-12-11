@@ -21,9 +21,9 @@ public class MainFrame extends JFrame {
 	public JPanel gamePanel;
 	public GameServer gameServer;
 	public GamePanel game;
-	public Panel mainMenu;
-	public Panel options;
-	public Panel instructions;
+	public JPanel mainMenu;
+	public JPanel options;
+	public JPanel instructions;
 	public CardLayout cardLayout;
 	public JPanel chatGUI;
 	public JTextArea textArea;
@@ -241,7 +241,7 @@ public class MainFrame extends JFrame {
 
 		this.game = new GamePanel(ip, playerName);
 		this.game.setPreferredSize(new Dimension(600, 500));
-		Button backButton = new Button("exitGame.png");
+		JButton backButton = new JButton("EXIT GAME");
 		this.game.add(backButton);
 	
 		backButton.addActionListener(
