@@ -17,8 +17,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public static final int STAGE_WIDTH = 540;
 	public static final int STAGE_HEIGHT = 240;
 
-	int x=100,y=100;
-
 	Thread t = new Thread(this);
 	String name;
 	String server = "localhost";
@@ -145,7 +143,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.draw (this.stage);
-		//g2.drawImage(this.player.getImg(),this.player.getX(),this.player.getY(),this);
 		for(User player : players){
 			g2.drawImage(player.getImg(),player.getX(),player.getY(),this);
 		}
@@ -154,20 +151,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	public void keyPressed(KeyEvent ke){
 		if(ke.getKeyCode()==KeyEvent.VK_UP){
 			this.player.moveY(-10);
-			System.out.println("UP");
 		}
 		if(ke.getKeyCode()==KeyEvent.VK_LEFT){
 			this.player.moveX(-10);
-			System.out.println("LEFT");
 		}
-
 		if(ke.getKeyCode()==KeyEvent.VK_DOWN){
 			this.player.moveY(10);
-			System.out.println("DOWN");
 		}
 		if(ke.getKeyCode()==KeyEvent.VK_RIGHT){
 			this.player.moveX(10);
-			System.out.println("RIGHT");
 		}
 		this.player.move();
 		this.checkIfDead();
