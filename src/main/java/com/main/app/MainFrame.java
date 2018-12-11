@@ -10,12 +10,16 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import com.main.app.GamePanel;
+import com.main.app.GameServer;
 
 import java.io.IOException;
+import java.lang.Exception;
 
 public class MainFrame extends JFrame {
+	private static final String SERVER_IP = "202.92.144.45";
 	public JPanel mainFrame;
 	public JPanel gamePanel;
+	public GameServer gameServer;
 	public GamePanel game;
 	public JPanel mainMenu;
 	public JPanel options;
@@ -167,10 +171,13 @@ public class MainFrame extends JFrame {
 						Integer maxPlayers = Integer.parseInt(num);
 						try{
 							client = new Client(1, maxPlayers, player);
-
-							initGame();
+							
+							initGame(client.getPlayerName());
+							gameServer = new GameServer(maxPlayers);
 							cardLayout.show(mainFrame, "game");
-						}catch(IOException err){}
+						}catch(IOException err){
+
+						}catch(Exception er){}
 					}
 				}
 			}
@@ -185,9 +192,11 @@ public class MainFrame extends JFrame {
 						try{
 							client = new Client(2, lobbyID, player);
 
-							initGame();
+							initGame(client.getPlayerName());
 							cardLayout.show(mainFrame, "game");
-						}catch(IOException err){}
+						}catch(IOException err){
+
+						}catch(Exception er){}
 					}
 				}
 			}
@@ -252,13 +261,15 @@ public class MainFrame extends JFrame {
 		sendButton.addActionListener(sendListener);
 	}
 	
-	public void initGame() {
-		this.gamePanel = new GamePanel();
+	public void initGame(String playerName) throws Exception {
+		this.gamePanel = new JPanel();
 		this.gamePanel.setLayout(new BoxLayout(this.gamePanel, BoxLayout.X_AXIS));
 
 		buildChatGUI();
 
-		this.game = new GamePanel();
+		String ip = JOptionPane.showInputDialog(options, "Enter your IP Address");
+
+		this.game = new GamePanel(ip, playerName);
 		this.game.setPreferredSize(new Dimension(600, 500));
 		JButton backButton = new JButton("EXIT GAME");
 		this.game.add(backButton);

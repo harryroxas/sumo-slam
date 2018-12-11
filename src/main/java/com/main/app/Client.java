@@ -43,6 +43,10 @@ public class Client {
         runClient(choice);
     }
 
+    public String getPlayerName(){
+        return this.playerName;
+    }
+
     public void setTextArea(JTextArea textArea){
         this.textArea = textArea;
     }
