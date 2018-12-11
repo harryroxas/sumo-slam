@@ -149,22 +149,24 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	public void keyPressed(KeyEvent ke){
-		if(ke.getKeyCode()==KeyEvent.VK_UP){
-			this.player.moveY(-10);
+		if(this.player.playerDead() == false){
+			if(ke.getKeyCode()==KeyEvent.VK_UP){
+				this.player.moveY(-10);
+			}
+			if(ke.getKeyCode()==KeyEvent.VK_LEFT){
+				this.player.moveX(-10);
+			}
+			if(ke.getKeyCode()==KeyEvent.VK_DOWN){
+				this.player.moveY(10);
+			}
+			if(ke.getKeyCode()==KeyEvent.VK_RIGHT){
+				this.player.moveX(10);
+			}
+			this.player.move();
+			this.checkIfDead();
+			this.checkCollisions();
+			this.send("PLAYER "+name+" "+player.getX()+" "+player.getY());
 		}
-		if(ke.getKeyCode()==KeyEvent.VK_LEFT){
-			this.player.moveX(-10);
-		}
-		if(ke.getKeyCode()==KeyEvent.VK_DOWN){
-			this.player.moveY(10);
-		}
-		if(ke.getKeyCode()==KeyEvent.VK_RIGHT){
-			this.player.moveX(10);
-		}
-		this.player.move();
-		this.checkIfDead();
-		this.checkCollisions();
-		this.send("PLAYER "+name+" "+player.getX()+" "+player.getY());
 	}
 
 	public void keyTyped(KeyEvent ke){}

@@ -70,11 +70,7 @@ public class User extends Sprite {
 		this.xCenter = this.getX()+(this.width/2);
 		this.yCenter = this.getY()+(this.height-(this.height/3));
 	}
-	
-	public void checkIfDead() {
-		
-	}
-	
+
     public void move() {
         int newX = this.getX() + this.xPosition;
         int newY = this.getY() + this.yPosition;
@@ -128,7 +124,7 @@ public class User extends Sprite {
         this.isDead = true;
     }
 
-    public boolean getPlayerStatus() {
+    public boolean playerDead() {
         return this.isDead;
     }
     
