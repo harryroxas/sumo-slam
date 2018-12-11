@@ -8,6 +8,11 @@ sudo mv protoc3/bin/* /usr/local/bin/
 sudo mv protoc3/include/* /usr/local/include/
 ```
 
+## Installing Apache Maven
+```
+unzip apache-maven-3.6.0-bin.zip
+export PATH=/opt/apache-maven-3.6.0/bin:$PATH
+```
 
 ## Running the Program
 1. Install [protobuf 3.6.1](https://github.com/protocolbuffers/protobuf) and build with [maven](https://maven.apache.org/).
