@@ -5,17 +5,39 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.util.ArrayList;
 
-public class GamePanel extends JPanel implements KeyListener{
+public class GamePanel extends JPanel implements Runnable, KeyListener {
+	private static final int PORT = 4444;
     public static final int STAGE_WIDTH = 540;
 	public static final int STAGE_HEIGHT = 240;
 
+	int x=100,y=100;
+
+	Thread t = new Thread(this);
+	String name;
+	String server = "localhost";
+	boolean connected = false;
+	DatagramSocket socket = new DatagramSocket();
+	String serverData;
+
+	public ArrayList<User> players = new ArrayList<User>();
 	public User player;
-	public User player2;
 	private boolean gameDone;
 	Ellipse2D stage;
 
-	public GamePanel(){
+	public GamePanel(String server, String name) throws Exception {
+		this.server = server;
+		this.name = name;
+		socket.setSoTimeout(100);
+
+		//this.offscreen=(BufferedImage)this.createImage(640, 480);
+
 		this.setLayout();
 		this.addComponents();
 		this.addKeyListener(this);	
@@ -25,6 +47,63 @@ public class GamePanel extends JPanel implements KeyListener{
 				requestFocus();
 			}
 		});
+
+		t.start();
+	}
+
+	public void send(String msg){
+		try{
+			byte[] buf = msg.getBytes();
+        	InetAddress address = InetAddress.getByName(server);
+        	DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
+        	socket.send(packet);
+        }catch(Exception e){}
+		
+	}
+
+	public void run(){
+		while(true){
+			try{
+				Thread.sleep(1);
+			}catch(Exception ioe){}
+						
+			byte[] buf = new byte[256];
+			DatagramPacket packet = new DatagramPacket(buf, buf.length);
+			try{
+     			socket.receive(packet);
+			}catch(Exception ioe){}
+			
+			serverData=new String(buf);
+			serverData=serverData.trim();
+			
+			//if (!serverData.equals("")){
+			//	System.out.println("Server Data:" +serverData);
+			//}
+ 
+			if (!connected && serverData.startsWith("CONNECTED")){
+				connected=true;
+				System.out.println("Connected.");
+			}else if (!connected){
+				System.out.println("Connecting..");				
+				send("CONNECT "+name);
+			}else if (connected){
+				//offscreen.getGraphics().clearRect(0, 0, 640, 480);
+				players.clear();
+				if (serverData.startsWith("PLAYER")){
+					String[] playersInfo = serverData.split(":");
+					for (int i=0;i<playersInfo.length;i++){
+						String[] playerInfo = playersInfo[i].split(" ");
+						String pname =playerInfo[1];
+						int x = Integer.parseInt(playerInfo[2]);
+						int y = Integer.parseInt(playerInfo[3]);
+						//draw on the offscreen image
+						User user = new User(i+1, x, y);
+						players.add(user);
+						this.repaint();					
+					}
+				}			
+			}			
+		}
 	}
 		
 	public void setLayout(){
@@ -36,19 +115,18 @@ public class GamePanel extends JPanel implements KeyListener{
 	public void addComponents(){
 		this.stage = new Ellipse2D.Float(10,210,STAGE_WIDTH, STAGE_HEIGHT);
 		this.player  = new User(1, 300, 300);
-		this.player2 = new User(2, 200, 300);
 	}
 
 	public void checkCollisions() {
 	    Rectangle active = this.player.getBounds();
-	    //for (Players player : players) {
-	        Rectangle others = this.player2.getBounds();
+	    for (User player : players) {
+	        Rectangle others = player.getBounds();
 	        if (active.intersects(others)) {
 	        	System.out.println("COLLIDES");
-	        	this.player.collidesWith(player2);
+	        	this.player.collidesWith(player);
 	        	this.repaint();
 	        }
-	    //}
+	    }
 	}
 	
 	public void checkIfDead() {
@@ -67,8 +145,10 @@ public class GamePanel extends JPanel implements KeyListener{
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.draw (this.stage);
-		g2.drawImage(this.player.getImg(),this.player.getX(),this.player.getY(),this);
-		g2.drawImage(this.player2.getImg(),this.player2.getX(),this.player2.getY(),this);
+		//g2.drawImage(this.player.getImg(),this.player.getX(),this.player.getY(),this);
+		for(User player : players){
+			g2.drawImage(player.getImg(),player.getX(),player.getY(),this);
+		}
 	}
 
 	public void keyPressed(KeyEvent ke){
@@ -92,7 +172,7 @@ public class GamePanel extends JPanel implements KeyListener{
 		this.player.move();
 		this.checkIfDead();
 		this.checkCollisions();
-		this.repaint();
+		this.send("PLAYER "+name+" "+player.getX()+" "+player.getY());
 	}
 
 	public void keyTyped(KeyEvent ke){}

@@ -1,5 +1,6 @@
 package com.main.app;
 
+import java.net.InetAddress;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
@@ -8,6 +9,10 @@ import javax.imageio.ImageIO;
 
 public class User extends Sprite {
     public static final int NORMAL_SPEED = 10;
+    private InetAddress address;
+    private int port;
+    private String name;
+
     public int xPosition;
     public int yPosition;
     public float xCenter;
@@ -18,8 +23,24 @@ public class User extends Sprite {
     public boolean isDead;
     public BufferedImage img;
 
-	public User(int playerNo, int x, int y) {
-		super(x, y);
+	public User(InetAddress address, int port, String name) {
+        super(300, 300);
+        this.address = address;
+        this.port = port;
+        this.name = name;
+        this.speed = NORMAL_SPEED;
+        this.noOfWins = 0;
+        this.isDead = false;
+        try{
+            this.img = ImageIO.read(User.class.getResource("/sumoWrestler" + this.playerNo + ".png"));
+        }catch(Exception e){}
+        this.setImg(this.img);
+        this.width = 60;
+        this.height = 60;
+    }
+
+    public User(int playerNo, int x, int y) {
+        super(x, y);
         this.playerNo = playerNo;
         this.speed = NORMAL_SPEED;
         this.noOfWins = 0;
@@ -117,7 +138,19 @@ public class User extends Sprite {
 	
 	public int getMoveY(){
 		return this.yPosition;
-	}
+    }
+    
+    public InetAddress getAddress(){
+        return this.address;
+    }
+
+    public int getPort(){
+        return this.port;
+    }
+
+    public String getName(){
+        return this.name;
+    }
 	
 	public Rectangle getBounds() {
 		return new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
@@ -125,6 +158,15 @@ public class User extends Sprite {
 	
 	public Point2D getCenter() {
 		return new Point2D.Float(this.xCenter, this.yCenter);
+    }
+    
+    public String toString(){
+		String retval="";
+		retval+="PLAYER ";
+		retval+=name+" ";
+		retval+=this.getX()+" ";
+		retval+=this.getY();
+		return retval;
 	}
 }
 
