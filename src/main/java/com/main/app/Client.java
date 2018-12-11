@@ -47,6 +47,10 @@ public class Client {
         return this.playerName;
     }
 
+    public String getLobbyId(){
+        return this.lobbyId;
+    }
+
     public void setTextArea(JTextArea textArea){
         this.textArea = textArea;
     }

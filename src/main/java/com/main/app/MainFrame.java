@@ -138,7 +138,7 @@ public class MainFrame extends JFrame {
 						try{
 							client = new Client(1, maxPlayers, player);
 							
-							initGame(client.getPlayerName());
+							initGame(client.getPlayerName(), client.getLobbyId());
 							gameServer = new GameServer(maxPlayers);
 							cardLayout.show(mainFrame, "game");
 						}catch(IOException err){
@@ -158,7 +158,7 @@ public class MainFrame extends JFrame {
 						try{
 							client = new Client(2, lobbyID, player);
 
-							initGame(client.getPlayerName());
+							initGame(client.getPlayerName(), lobbyID);
 							cardLayout.show(mainFrame, "game");
 						}catch(IOException err){
 
@@ -196,7 +196,7 @@ public class MainFrame extends JFrame {
 		);
 	}
 
-	public void buildChatGUI(){
+	public void buildChatGUI(String lobbyID){
 		this.chatGUI = new JPanel();
 		this.chatGUI.setLayout(new BoxLayout(this.chatGUI, BoxLayout.Y_AXIS));
 
@@ -205,6 +205,7 @@ public class MainFrame extends JFrame {
 		this.textArea.setLineWrap(true);
 		this.chatGUI.add(new JScrollPane(textArea), BorderLayout.CENTER);
 		client.setTextArea(textArea);
+		textArea.append("LOBBY ID: "+lobbyID+"\n");
 
 		Box box = Box.createHorizontalBox();
 		this.chatGUI.add(box, BorderLayout.SOUTH);
@@ -230,11 +231,11 @@ public class MainFrame extends JFrame {
 		sendButton.addActionListener(sendListener);
 	}
 	
-	public void initGame(String playerName) throws Exception {
+	public void initGame(String playerName, String lobbyID) throws Exception {
 		this.gamePanel = new JPanel();
 		this.gamePanel.setLayout(new BoxLayout(this.gamePanel, BoxLayout.X_AXIS));
 
-		buildChatGUI();
+		buildChatGUI(lobbyID);
 
 		String ip = JOptionPane.showInputDialog(options, "Enter your IP Address");
 
