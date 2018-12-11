@@ -18,3 +18,9 @@ export PATH=/opt/apache-maven-3.6.0/bin:$PATH
 1. Install [protobuf 3.6.1](https://github.com/protocolbuffers/protobuf) and build with [maven](https://maven.apache.org/).
 2. Compile the program with `mvn package`.
 3. Run the application with `java -cp target/my-app-1.0-SNAPSHOT.jar com.main.app.Main`.
+
+## Members
+1. Legaspi, John Dewey
+2. Matienzo, John Louie
+3. Pangilinan, Moesha Dane
+4. Roxas, Harold James
