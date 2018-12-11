@@ -144,7 +144,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.draw (this.stage);
 		for(User player : players){
-			g2.drawImage(player.getImg(),player.getX(),player.getY(),this);
+			if(player.playerDead() == false){
+				g2.drawImage(player.getImg(),player.getX(),player.getY(),this);
+			}
 		}
 	}
 
